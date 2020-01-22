@@ -19,6 +19,16 @@ $messages | Select-Object `
     | ConvertTo-Csv `
     | Out-File -Encoding default -FilePath "$HOME\Desktop\mychat_log.csv"
 
+# アカウントIDを取得する
+$accountId = $messages | Select-Object -First 1 -ExpandProperty account | Select-Object -ExpandProperty account_id 
+
+# ファイルDL IDを取得する
+$files = Invoke-RestMethod -Headers $headers "https://api.chatwork.com/v2/rooms/$roomId/files?account_id=$accountId"
+$fileIds = $files | Select-Object -ExpandProperty file_id 
+
+foreach ($fileId in $fileIds) {
+    $file = Invoke-WebRequest -Headers $headers "https://api.chatwork.com/v2/rooms/{$roomId/files/$fileId?create_download_url=1"
+}
 
 <#
 .SYNOPSIS
